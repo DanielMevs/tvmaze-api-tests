@@ -1,0 +1,6 @@
+name: All common security-related variables for the project
+description: All the configuration variables for the security suites
+
+variables:
+  normal_query: Breaking Bad
+  delay_between_stages: 2

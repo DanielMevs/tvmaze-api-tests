@@ -1,0 +1,6 @@
+tvmaze-api.log
+.env
+venv
+admin_cmds.txt
+.pytest_cache/
+__pycache__/ 

@@ -1,0 +1,40 @@
+# This test  asserts that shows that do no exist are not found
+
+test_name: Show Search tests - negative testing
+
+includes:
+  - !include common.yaml
+
+marks:
+  - usefixtures:
+      - tavern_global_cfg
+
+stages:
+  - name: Verify empty search returns empty array
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/search/shows"
+      method: GET
+      params:
+        q: "thisshowdoesntexist12345"
+    response:
+      status_code: 200
+      verify_response_with:
+        function: tavern.helpers:validate_content
+        extra_kwargs:
+          comparisons:
+            - jmespath: "length(@)"
+              operator: "eq"
+              expected: 0
+    delay_after: !float "{delay_between_stages}"
+
+  - name: Test error handling with invalid show ID
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/shows/9999999"
+      method: GET
+    response:
+      status_code: 404
+      json:
+        name: "Not Found"
+        message: ""
+        code: 0
+        status: 404

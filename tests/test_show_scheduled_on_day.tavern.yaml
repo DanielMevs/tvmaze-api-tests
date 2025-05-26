@@ -1,0 +1,26 @@
+# This test asserts that the show is scheduled on a specified day
+
+test_name: test show scheduled on day
+
+includes:
+  - !include common.yaml
+
+marks:
+  - singlesearch
+  - usefixtures:
+      - tavern_global_cfg
+
+stages:
+  - name: make sure show is scheduled on day
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/singlesearch/shows"
+      method: GET
+      params:
+        q: "{show:s}"
+    response:
+      status_code: 200
+      verify_response_with:
+        function: utilities.utils:scheduled_on_day
+        extra_kwargs:
+          day: "{day:s}"
+    delay_after: !float "{delay_between_stages}"

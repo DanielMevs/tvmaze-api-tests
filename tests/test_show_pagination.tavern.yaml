@@ -1,0 +1,25 @@
+# This test asserts that pagination results from the shows endpoint are correct
+
+test_name: test pagination of results from shows endpoint
+
+includes:
+  - !include common.yaml
+
+marks:
+  - usefixtures:
+      - time_request
+      - tavern_global_cfg
+  - pagination
+
+stages:
+  - name: get the link for the show
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/shows"
+      method: GET
+    response:
+      status_code: 200
+      verify_response_with:
+        function: utilities.utils:verify_pagination
+        extra_kwargs:
+          pagination_length: !int "{pagination_length}"
+    delay_after: !float "{delay_between_stages}"

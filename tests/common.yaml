@@ -1,0 +1,9 @@
+name: All common variables for the project
+description: All the configuration variables for the tv_maze suites
+
+variables:
+  show: Archer
+  delay_between_stages: 3
+  day: Wednesday
+  actor: H. Jon Benjamin
+  pagination_length: 250

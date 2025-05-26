@@ -1,0 +1,77 @@
+name: TV Maze API Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run API Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🌐 Setup Environment
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          SQL_INJECTION_QUERY: ${{ secrets.SQL_INJECTION_QUERY }}
+
+      - name: 🧪 Run Tests
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          SQL_INJECTION_QUERY: ${{ secrets.SQL_INJECTION_QUERY }}
+        run: pytest tests/
+
+      - name: 📊 Upload Test Report
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-report
+          path: reports/
+          retention-days: 7
+
+  test-by-category:
+    name: Test Categories
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    strategy:
+      matrix:
+        category: [singlesearch, cast, pagination, security]
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install Dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: 🌐 Setup Environment
+        run: |
+          echo "BASE_URL=https://api.tvmaze.com" >> $GITHUB_ENV
+          echo "SQL_INJECTION_QUERY=\"'; DROP TABLE shows; --\"" >> $GITHUB_ENV
+
+      - name: 🏷️ Run ${{ matrix.category }} Tests
+        run: pytest -m ${{ matrix.category }}

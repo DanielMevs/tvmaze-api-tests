@@ -1,0 +1,52 @@
+# This test asserts that SQL Injection attempts are protected against
+
+test_name: TVMaze API SQL Injection Test
+
+includes:
+  - !include common_security.yaml
+
+marks:
+  - security
+  - usefixtures:
+      - tavern_global_cfg
+
+stages:
+  - name: Normal search request
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/search/shows"
+      method: GET
+      params:
+        q: "{normal_query}"
+      headers:
+        Accept: application/json
+    response:
+      status_code: 200
+      verify_response_with:
+        function: tavern.helpers:validate_content
+        extra_kwargs:
+          comparisons:
+            - jmespath: "length(@)" # Get the length of the response
+              operator: "gt"
+              expected: 0
+            - jmespath: "[0].show.name" # Get the first item's show name
+              operator: "eq"
+              expected: "{normal_query}"
+    delay_after: !float "{delay_between_stages}"
+
+  - name: SQL injection attempt
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/search/shows"
+      method: GET
+      params:
+        q: "{tavern_global_cfg.security.sql_injection_query:s}"
+      headers:
+        Accept: application/json
+    response:
+      status_code: 200
+      verify_response_with:
+        function: tavern.helpers:validate_content
+        extra_kwargs:
+          comparisons:
+            - jmespath: "length(@)"
+              operator: "eq"
+              expected: 0

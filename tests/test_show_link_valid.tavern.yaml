@@ -1,0 +1,31 @@
+# This test ensures the show has a valid link embedded in the response.
+
+test_name: test valid show link
+
+includes:
+  - !include common.yaml
+
+marks:
+  - singlesearch
+  - usefixtures:
+      - tavern_global_cfg
+
+stages:
+  - name: get the link for the show
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/singlesearch/shows"
+      params:
+        q: "{show:s}"
+      method: GET
+    response:
+      status_code: 200
+      save:
+        json:
+          show_url: url
+    delay_after: !float "{delay_between_stages}"
+
+  - name: verify the link is up
+    request:
+      url: "{show_url:s}"
+    response:
+      status_code: 200

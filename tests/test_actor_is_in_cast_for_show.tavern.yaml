@@ -1,0 +1,36 @@
+# This test asserts an actor is in the cast for a given show
+
+test_name: Actor is in cast
+
+includes:
+  - !include common.yaml
+
+marks:
+  - singlesearch
+  - cast
+  - usefixtures:
+      - tavern_global_cfg
+
+stages:
+  - name: get the show id
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/singlesearch/shows"
+      method: GET
+      params:
+        q: "{show:s}"
+    response:
+      status_code: 200
+      save:
+        json:
+          show_id: id
+    delay_after: !float "{delay_between_stages}"
+
+  - name: verify that actor is in the cast for show
+    request:
+      url: "{tavern_global_cfg.tv_maze.url:s}/shows/{show_id}/cast"
+    response:
+      status_code: 200
+      verify_response_with:
+        function: utilities.utils:actor_in_show
+        extra_kwargs:
+          actor: "{actor:s}"
