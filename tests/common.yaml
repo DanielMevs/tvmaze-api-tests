@@ -8,4 +8,4 @@ variables:
   actor: H. Jon Benjamin
   pagination_length: 250
   fake_show: thisshowdoesntexist12345
-  fake_id: 9999999
+  fake_id: "9999999"
