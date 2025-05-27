@@ -26,11 +26,6 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🌐 Setup Environment
-        env:
-          BASE_URL: ${{ secrets.BASE_URL }}
-          SQL_INJECTION_QUERY: ${{ secrets.SQL_INJECTION_QUERY }}
-
       - name: 🧪 Run Tests
         env:
           BASE_URL: ${{ secrets.BASE_URL }}
@@ -43,7 +38,7 @@ jobs:
         with:
           name: test-report
           path: reports/
-          retention-days: 6
+          retention-days: 7
 
   test-by-category:
     name: Test Categories
@@ -68,10 +63,8 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: 🌐 Setup Environment
-        run: |
-          echo "BASE_URL=https://api.tvmaze.com" >> $GITHUB_ENV
-          echo "SQL_INJECTION_QUERY=\"'; DROP TABLE shows; --\"" >> $GITHUB_ENV
-
       - name: 🏷️ Run ${{ matrix.category }} Tests
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          SQL_INJECTION_QUERY: ${{ secrets.SQL_INJECTION_QUERY }}
         run: pytest -m ${{ matrix.category }}
