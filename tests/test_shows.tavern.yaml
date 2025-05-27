@@ -1,4 +1,4 @@
-# This test  asserts that shows that do no exist are not found
+# This test  asserts that shows that don't exist are not found
 
 test_name: Show Search tests - negative testing
 
