@@ -15,7 +15,7 @@ stages:
       url: "{tavern_global_cfg.tv_maze.url:s}/search/shows"
       method: GET
       params:
-        q: "thisshowdoesntexist12345"
+        q: "{fake_show:s}"
     response:
       status_code: 200
       verify_response_with:
@@ -29,7 +29,7 @@ stages:
 
   - name: Test error handling with invalid show ID
     request:
-      url: "{tavern_global_cfg.tv_maze.url:s}/shows/9999999"
+      url: "{tavern_global_cfg.tv_maze.url:s}/shows/{fake_id:s}"
       method: GET
     response:
       status_code: 404
