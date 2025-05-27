@@ -43,7 +43,7 @@ jobs:
         with:
           name: test-report
           path: reports/
-          retention-days: 7
+          retention-days: 6
 
   test-by-category:
     name: Test Categories
