@@ -3,7 +3,7 @@
 test_name: Actor is in cast
 
 includes:
-  - !include common.yaml
+  - !include ../common.yaml
 
 marks:
   - singlesearch

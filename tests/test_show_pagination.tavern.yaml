@@ -3,7 +3,7 @@
 test_name: test pagination of results from shows endpoint
 
 includes:
-  - !include common.yaml
+  - !include ../common.yaml
 
 marks:
   - usefixtures:

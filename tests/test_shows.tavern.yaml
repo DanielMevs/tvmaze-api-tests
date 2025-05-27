@@ -3,7 +3,7 @@
 test_name: Show Search tests - negative testing
 
 includes:
-  - !include common.yaml
+  - !include ../common.yaml
 
 marks:
   - usefixtures:

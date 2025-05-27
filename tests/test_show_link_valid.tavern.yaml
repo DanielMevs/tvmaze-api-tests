@@ -3,7 +3,7 @@
 test_name: test valid show link
 
 includes:
-  - !include common.yaml
+  - !include ../common.yaml
 
 marks:
   - singlesearch

@@ -3,7 +3,7 @@
 test_name: TVMaze API SQL Injection Test
 
 includes:
-  - !include common_security.yaml
+  - !include ../common_security.yaml
 
 marks:
   - security
